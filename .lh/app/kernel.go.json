@@ -11,7 +11,7 @@
                 },
                 {
                     "date": 1772220531347,
-                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,10 +4,10 @@\n \t\"fmt\"\n \t\"log\"\n \t\"net/http\"\n \n-\tgohttp \"github.com/km-arc/go-collections/framework/http\"\n-\t\"github.com/km-arc/go-collections/framework/routing\"\n+\tgohttp \"github.com/km-arc/go-laravel/http\"\n+\t\"github.com/km-arc/go-laravel/routing\"\n \t\"github.com/km-arc/go-laravel/config\"\n )\n \n // Application is the top-level container — mirrors Laravel's Application.\n"
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,10 +4,10 @@\n \t\"fmt\"\n \t\"log\"\n \t\"net/http\"\n \n-\tgohttp \"github.com/km-arc/go-laravel/framework/http\"\n-\t\"github.com/km-arc/go-laravel/framework/routing\"\n+\tgohttp \"github.com/km-arc/go-laravel/http\"\n+\t\"github.com/km-arc/go-laravel/routing\"\n \t\"github.com/km-arc/go-laravel/config\"\n )\n \n // Application is the top-level container — mirrors Laravel's Application.\n"
                 }
             ],
             "date": 1772220323883,

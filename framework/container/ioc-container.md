@@ -1,6 +1,6 @@
 # IoC Container & Service Providers
 
-> Full documentation for `github.com/km-arc/go-collections/framework/container`
+> Full documentation for `github.com/km-arc/go-laravel/framework/container`
 >
 > Mirrors [Laravel's Service Container](https://laravel.com/docs/container) and
 > [Service Providers](https://laravel.com/docs/providers) as closely as Go allows.

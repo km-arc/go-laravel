@@ -3,7 +3,7 @@ package container_test
 import (
 	"testing"
 
-	"github.com/km-arc/go-collections/framework/container"
+	"github.com/km-arc/go-laravel/framework/container"
 )
 
 // ── stub providers ────────────────────────────────────────────────────────────
