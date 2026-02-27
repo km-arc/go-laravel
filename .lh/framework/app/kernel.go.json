@@ -1,0 +1,22 @@
+{
+    "sourceFile": "framework/app/kernel.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1772227194484,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1772227757137,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,14 @@\n import (\n \t\"fmt\"\n \t\"log\"\n \t\"net/http\"\n+\n+\t\"github.com/km-arc/go-laravel/framework/config\"\n+\t\"github.com/km-arc/go-laravel/framework/container\"\n+\tgohttp \"github.com/km-arc/go-laravel/framework/http\"\n+\t\"github.com/km-arc/go-laravel/framework/providers\"\n+\t\"github.com/km-arc/go-laravel/framework/routing\"\n )\n \n // Application is the top-level application container.\n // It embeds the IoC Container and ProviderRegistry so user code can\n@@ -88,5 +94,5 @@\n \treturn gohttp.NewRequest(r)\n }\n func (c *Controller) Response(w http.ResponseWriter) *gohttp.Response {\n \treturn gohttp.NewResponse(w)\n-}\n+}\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1772227194484,
+            "name": "Commit-0",
+            "content": "package app\n\nimport (\n\t\"fmt\"\n\t\"log\"\n\t\"net/http\"\n)\n\n// Application is the top-level application container.\n// It embeds the IoC Container and ProviderRegistry so user code can\n// call app.Bind(), app.Singleton(), app.Register() directly —\n// exactly like $app in Laravel's bootstrap/app.php.\ntype Application struct {\n\t*container.Container\n\tProviders *container.ProviderRegistry\n}\n\n// New creates and bootstraps the application.\nfunc New(envFiles ...string) *Application {\n\tc := container.New()\n\tregistry := container.NewProviderRegistry(c)\n\n\tapp := &Application{\n\t\tContainer: c,\n\t\tProviders: registry,\n\t}\n\n\t// Register framework core providers (same order as Laravel)\n\tregistry.Register(&providers.ConfigServiceProvider{EnvFiles: envFiles})\n\tregistry.Register(&providers.RoutingServiceProvider{})\n\tregistry.Register(&providers.ViewServiceProvider{})\n\n\treturn app\n}\n\n// Register adds a ServiceProvider to the application.\nfunc (a *Application) Register(provider container.ServiceProvider) {\n\ta.Providers.Register(provider)\n}\n\n// Boot runs the Boot() phase on all providers.\nfunc (a *Application) Boot() {\n\ta.Providers.Boot()\n}\n\n// Config resolves *config.Config from the container.\nfunc (a *Application) Config() *config.Config {\n\treturn container.Resolve[*config.Config](a.Container, \"config\")\n}\n\n// Router resolves *routing.Router from the container.\nfunc (a *Application) Router() *routing.Router {\n\treturn container.Resolve[*routing.Router](a.Container, \"router\")\n}\n\n// Views resolves *gohttp.ViewEngine from the container.\nfunc (a *Application) Views() *gohttp.ViewEngine {\n\treturn container.Resolve[*gohttp.ViewEngine](a.Container, \"view\")\n}\n\n// Run boots the application (if needed) and starts the HTTP server.\nfunc (a *Application) Run() {\n\tif !a.Providers.Booted() {\n\t\ta.Boot()\n\t}\n\tcfg := a.Config()\n\trouter := a.Router()\n\taddr := \":\" + cfg.App.Port\n\tfmt.Printf(\"🚀  %s running on http://localhost%s  [%s]\\n\",\n\t\tcfg.App.Name, addr, cfg.App.Env)\n\tif err := http.ListenAndServe(addr, router); err != nil {\n\t\tlog.Fatalf(\"server error: %v\", err)\n\t}\n}\n\n// Environment returns APP_ENV value.\nfunc (a *Application) Environment() string { return a.Config().App.Env }\nfunc (a *Application) IsLocal() bool       { return a.Environment() == \"local\" }\nfunc (a *Application) IsProduction() bool  { return a.Environment() == \"production\" }\nfunc (a *Application) IsTesting() bool     { return a.Environment() == \"testing\" }\nfunc (a *Application) IsDebug() bool       { return a.Config().App.Debug }\nfunc (a *Application) Version() string     { return \"0.1.0\" }\n\n// Controller is an embeddable base for HTTP controllers.\ntype Controller struct{}\n\nfunc (c *Controller) Request(r *http.Request) *gohttp.Request {\n\treturn gohttp.NewRequest(r)\n}\nfunc (c *Controller) Response(w http.ResponseWriter) *gohttp.Response {\n\treturn gohttp.NewResponse(w)\n}\n"
+        }
+    ]
+}

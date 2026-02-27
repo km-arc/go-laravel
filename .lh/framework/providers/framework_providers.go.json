@@ -1,0 +1,30 @@
+{
+    "sourceFile": "framework/providers/framework_providers.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1772227465418,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1772228112399,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n package providers\n \n import (\n-\t\"c/framework/config\"\n+\t\"github.com/km-arc/go-laravel/framework/config\"\n+\t\"github.com/km-arc/go-collections/framework/config\"\n \t\"github.com/km-arc/go-collections/framework/container\"\n \tgohttp \"github.com/km-arc/go-collections/framework/http\"\n \t\"github.com/km-arc/go-collections/framework/routing\"\n )\n"
+                },
+                {
+                    "date": 1772228129182,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,12 @@\n package providers\n \n import (\n \t\"github.com/km-arc/go-laravel/framework/config\"\n-\t\"github.com/km-arc/go-collections/framework/config\"\n-\t\"github.com/km-arc/go-collections/framework/container\"\n-\tgohttp \"github.com/km-arc/go-collections/framework/http\"\n-\t\"github.com/km-arc/go-collections/framework/routing\"\n+\t\"github.com/km-arc/go-laravel/framework/config\"\n+\t\"github.com/km-arc/go-laravel/framework/container\"\n+\tgohttp \"github.com/km-arc/go-laravel/framework/http\"\n+\t\"github.com/km-arc/go-laravel/framework/routing\"\n )\n \n // ── ConfigServiceProvider ─────────────────────────────────────────────────────\n \n"
+                },
+                {
+                    "date": 1772228138085,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,8 @@\n package providers\n \n import (\n \t\"github.com/km-arc/go-laravel/framework/config\"\n-\t\"github.com/km-arc/go-laravel/framework/config\"\n \t\"github.com/km-arc/go-laravel/framework/container\"\n \tgohttp \"github.com/km-arc/go-laravel/framework/http\"\n \t\"github.com/km-arc/go-laravel/framework/routing\"\n )\n"
+                }
+            ],
+            "date": 1772227465418,
+            "name": "Commit-0",
+            "content": "package providers\n\nimport (\n\t\"c/framework/config\"\n\t\"github.com/km-arc/go-collections/framework/container\"\n\tgohttp \"github.com/km-arc/go-collections/framework/http\"\n\t\"github.com/km-arc/go-collections/framework/routing\"\n)\n\n// ── ConfigServiceProvider ─────────────────────────────────────────────────────\n\n// ConfigServiceProvider loads the application configuration from .env and\n// binds it into the container as \"config\".\n//\n// Bound abstracts:\n//   - \"config\"  → *config.Config\n//   - \"app\"     → *config.AppConfig  (alias shorthand)\n//\n// Laravel equivalent:\n//\n//\t// Illuminate\\Foundation\\Bootstrap\\LoadConfiguration\n//\t$app->singleton('config', fn() => new Repository($items));\ntype ConfigServiceProvider struct {\n\tcontainer.BaseProvider\n\tEnvFiles []string\n}\n\nfunc (p *ConfigServiceProvider) Register(app *container.Container) {\n\tenvFiles := p.EnvFiles\n\tapp.Singleton(\"config\", func(c *container.Container) any {\n\t\treturn config.Load(envFiles...)\n\t})\n\tapp.Alias(\"config\", \"configuration\")\n}\n\n// ── RoutingServiceProvider ────────────────────────────────────────────────────\n\n// RoutingServiceProvider registers the HTTP router.\n//\n// Bound abstracts:\n//   - \"router\"  → *routing.Router\n//\n// Laravel equivalent:\n//\n//\t// Illuminate\\Routing\\RoutingServiceProvider\n//\t$app->singleton('router', fn($app) => new Router($app['events'], $app));\ntype RoutingServiceProvider struct {\n\tcontainer.BaseProvider\n}\n\nfunc (p *RoutingServiceProvider) Register(app *container.Container) {\n\tapp.Singleton(\"router\", func(c *container.Container) any {\n\t\treturn routing.New()\n\t})\n}\n\n// ── ViewServiceProvider ───────────────────────────────────────────────────────\n\n// ViewServiceProvider registers the template engine.\n//\n// Bound abstracts:\n//   - \"view\"   → *gohttp.ViewEngine\n//\n// Configuration keys read from \"config\":\n//   - view.dir (default: \"./views\")\n//   - view.ext (default: \".html\")\n//\n// Laravel equivalent:\n//\n//\t// Illuminate\\View\\ViewServiceProvider\n//\t$app->singleton('view', fn($app) => new Factory(...));\ntype ViewServiceProvider struct {\n\tcontainer.BaseProvider\n\tDir string // template directory, default: \"./views\"\n\tExt string // file extension,    default: \".html\"\n}\n\nfunc (p *ViewServiceProvider) Register(app *container.Container) {\n\tdir := p.Dir\n\tif dir == \"\" {\n\t\tdir = \"./views\"\n\t}\n\text := p.Ext\n\tif ext == \"\" {\n\t\text = \".html\"\n\t}\n\n\tapp.Singleton(\"view\", func(c *container.Container) any {\n\t\treturn gohttp.NewViewEngine(dir, ext)\n\t})\n}\n"
+        }
+    ]
+}

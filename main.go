@@ -3,110 +3,103 @@ package main
 import (
 	"net/http"
 
-	"github.com/km-arc/go-laravel/app"
-	gohttp "github.com/km-arc/go-laravel/http"
-	"github.com/km-arc/go-laravel/http/validation"
-	"github.com/km-arc/go-laravel/routing"
+	"github.com/km-arc/go-laravel/framework/app"
+	"github.com/km-arc/go-laravel/framework/container"
+	gohttp "github.com/km-arc/go-laravel/framework/http"
+	"github.com/km-arc/go-laravel/framework/http/validation"
+	"github.com/km-arc/go-laravel/framework/routing"
 )
 
+// ── Example: custom service provider ─────────────────────────────────────────
+
+// Logger is a simple example service.
+type Logger struct{ prefix string }
+
+func (l *Logger) Info(msg string) { println("[" + l.prefix + "] " + msg) }
+
+// LogServiceProvider mirrors Laravel's service provider pattern.
+//
+//	// Laravel:
+//	// class LogServiceProvider extends ServiceProvider {
+//	//     public function register(): void {
+//	//         $this->app->singleton(Logger::class, fn() => new Logger);
+//	//     }
+//	// }
+type LogServiceProvider struct{ container.BaseProvider }
+
+func (p *LogServiceProvider) Register(app *container.Container) {
+	app.Singleton("logger", func(c *container.Container) any {
+		return &Logger{prefix: "APP"}
+	})
+}
+
+func (p *LogServiceProvider) Boot(app *container.Container) {
+	logger := container.Resolve[*Logger](app, "logger")
+	logger.Info("Application booted ✅")
+}
+
+// ── main ──────────────────────────────────────────────────────────────────────
+
 func main() {
-	application := app.New() // loads .env automatically
+	// 1. Create application (loads .env, registers core providers)
+	//    Laravel: $app = require __DIR__.'/../bootstrap/app.php';
+	application := app.New()
 
-	r := application.Router
+	// 2. Register your own providers
+	//    Laravel: $app->register(new LogServiceProvider($app))
+	application.Register(&LogServiceProvider{})
 
-	// ── Basic routes ─────────────────────────────────────────────────────────
+	// 3. Register routes (resolve router from container)
+	//    Laravel: Route::get('/', ...)
+	r := application.Router()
 
 	r.Get("/", func(w http.ResponseWriter, req *http.Request) {
-		res := gohttp.NewResponse(w)
-		res.Success(map[string]any{"message": "Welcome to Go-Laravel!"})
+		gohttp.NewResponse(w).Success(map[string]any{
+			"app":     application.Config().App.Name,
+			"version": application.Version(),
+			"env":     application.Environment(),
+		})
 	})
 
-	// ── Route prefix (like Route::prefix('api')) ──────────────────────────────
-
+	// 4. API prefix group
 	r.Prefix("/api/v1", func(api *routing.Router) {
 
-		// GET /api/v1/users
-		api.Get("/users", func(w http.ResponseWriter, req *http.Request) {
-			res := gohttp.NewResponse(w)
-			res.Success([]map[string]any{
-				{"id": 1, "name": "Alice"},
-				{"id": 2, "name": "Bob"},
-			})
-		})
-
-		// POST /api/v1/users
 		api.Post("/users", func(w http.ResponseWriter, req *http.Request) {
 			request := gohttp.NewRequest(req)
 			res := gohttp.NewResponse(w)
 
-			// 1. Bind JSON body into a struct
 			var body struct {
 				Name  string `json:"name"`
 				Email string `json:"email"`
-				Age   string `json:"age"`
 			}
 			if err := request.Bind(&body); err != nil {
 				res.Error(http.StatusBadRequest, err.Error())
 				return
 			}
 
-			// 2. Validate — Laravel-style rules
 			v := validation.Make(map[string]string{
 				"name":  body.Name,
 				"email": body.Email,
-				"age":   body.Age,
 			}, validation.Rules{
 				"name":  "required|min:2|max:100",
 				"email": "required|email",
-				"age":   "required|numeric|gte:18",
 			})
 
 			if v.Fails() {
-				// 3. Return 422 {"errors": {"field": ["msg"]}}
 				res.ValidationError(v.Errors())
 				return
 			}
 
-			// 4. Return 201 created
-			res.Created(map[string]any{
-				"name":  body.Name,
-				"email": body.Email,
-			})
-		})
+			// Resolve logger from container anywhere in your app
+			logger := container.Resolve[*Logger](application.Container, "logger")
+			logger.Info("Creating user: " + body.Name)
 
-		// GET /api/v1/users/{id}
-		api.Get("/users/{id}", func(w http.ResponseWriter, req *http.Request) {
-			res := gohttp.NewResponse(w)
-			id := routing.Param(req, "id")
-			res.Success(map[string]any{"id": id})
+			res.Created(map[string]any{"name": body.Name, "email": body.Email})
 		})
 
 	})
 
-	// ── Auth group with middleware ─────────────────────────────────────────────
-
-	r.Group(func(protected *routing.Router) {
-		protected.Middleware(AuthMiddleware)
-
-		protected.Get("/profile", func(w http.ResponseWriter, req *http.Request) {
-			res := gohttp.NewResponse(w)
-			res.Success(map[string]any{"user": "authenticated"})
-		})
-	})
-
+	// 5. Boot + run
+	//    Laravel: $kernel->handle(Request::capture())
 	application.Run()
-}
-
-// AuthMiddleware is an example JWT/token guard.
-func AuthMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		req := gohttp.NewRequest(r)
-		res := gohttp.NewResponse(w)
-
-		if req.BearerToken() == "" {
-			res.Unauthorized()
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
 }
