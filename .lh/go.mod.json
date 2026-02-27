@@ -1,0 +1,30 @@
+{
+    "sourceFile": "go.mod",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1772218611409,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1772218756362,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,7 +2,7 @@\n \n go 1.26\n \n require (\n-\tgithub.com/go-chi/chi/v5 v5.0.12\n+\tgithub.com/go-chi/chi/v5 v5.2.5\n \tgithub.com/joho/godotenv v1.5.1\n )\n"
+                },
+                {
+                    "date": 1772218935498,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-module github.com/km-arc/go-collections/framework\n+module github.com/km-arc/go-/framework\n \n go 1.26\n \n require (\n"
+                },
+                {
+                    "date": 1772218943673,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-module github.com/km-arc/go-/framework\n+module github.com/km-arc/go-laravel\n \n go 1.26\n \n require (\n"
+                }
+            ],
+            "date": 1772218611406,
+            "name": "Commit-0",
+            "content": "module github.com/km-arc/go-collections/framework\n\ngo 1.26\n\nrequire (\n\tgithub.com/go-chi/chi/v5 v5.0.12\n\tgithub.com/joho/godotenv v1.5.1\n)\n"
+        }
+    ]
+}

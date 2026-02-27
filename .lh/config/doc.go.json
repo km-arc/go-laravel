@@ -1,0 +1,18 @@
+{
+    "sourceFile": "config/doc.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1772219607658,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1772219607658,
+            "name": "Commit-0",
+            "content": "// Package validation provides Laravel-compatible input validation.\n//\n// # Overview\n//\n// The validation package mirrors Laravel's Validator facade and its rule syntax.\n// Rules are expressed as pipe-separated strings on a map of field names.\n//\n// # Basic Usage\n//\n//\tv := validation.Make(map[string]string{\n//\t    \"name\":  \"Alice\",\n//\t    \"email\": \"alice@example.com\",\n//\t}, validation.Rules{\n//\t    \"name\":  \"required|min:2|max:100\",\n//\t    \"email\": \"required|email\",\n//\t})\n//\n//\tif v.Fails() {\n//\t    // v.Errors() returns *Errors with Bag map[string][]string\n//\t    // JSON: {\"errors\": {\"field\": [\"message1\", \"message2\"]}}\n//\t}\n//\n// # Available Rules\n//\n// String rules:\n//   - required — field must be present and non-empty\n//   - string   — passes (all Go form values are strings)\n//   - min:n    — minimum n UTF-8 characters\n//   - max:n    — maximum n UTF-8 characters\n//   - size:n   — exactly n UTF-8 characters\n//   - between:min,max — length between min and max (inclusive)\n//   - alpha    — letters only [a-zA-Z]\n//   - alpha_num — letters and numbers [a-zA-Z0-9]\n//   - alpha_dash — letters, numbers, dashes, underscores\n//   - regex:pattern — must match regexp pattern\n//\n// Format rules:\n//   - email — valid RFC 5322 email address\n//   - url   — must start with http:// or https://\n//\n// Numeric rules:\n//   - numeric — parseable as float64\n//   - integer — parseable as int\n//   - gt:n    — greater than n\n//   - gte:n   — greater than or equal to n\n//   - lt:n    — less than n\n//   - lte:n   — less than or equal to n\n//\n// Comparison rules:\n//   - confirmed       — field_confirmation must match field\n//   - same:other      — must equal data[other]\n//   - different:other — must not equal data[other]\n//\n// Type rules:\n//   - boolean — true/false/1/0/yes/no (case-insensitive)\n//   - in:a,b,c     — value must be in the comma-separated list\n//   - not_in:a,b,c — value must NOT be in the comma-separated list\n//\n// Control rules:\n//   - nullable  — allows empty/missing values; stops further rule processing\n//   - sometimes — skips all rules silently if field is absent\n//\n// # Error Bag\n//\n// Errors are stored in a MessageBag that serialises to the same JSON structure\n// as Laravel's validation errors:\n//\n//\t{\n//\t  \"errors\": {\n//\t    \"email\": [\"The email field is required.\", \"The email must be a valid email address.\"],\n//\t    \"age\":   [\"The age must be greater than or equal to 18.\"]\n//\t  }\n//\t}\npackage validation"
+        }
+    ]
+}

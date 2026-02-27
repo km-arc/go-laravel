@@ -1,0 +1,18 @@
+{
+    "sourceFile": "http/doc.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1772219635456,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1772219635456,
+            "name": "Commit-0",
+            "content": "// Package http provides Laravel-compatible request and response helpers.\n//\n// # Request\n//\n// Request wraps *http.Request with a fluent API mirroring Laravel's\n// Illuminate\\Http\\Request.\n//\n//\treq := gohttp.NewRequest(r)\n//\n//\t// Bind JSON / form body into a struct\n//\tvar payload struct {\n//\t    Name string `json:\"name\"`\n//\t}\n//\tif err := req.Bind(&payload); err != nil { ... }\n//\n//\t// Input retrieval (query string + POST body)\n//\tname  := req.Input(\"name\", \"default\")\n//\tpage  := req.Query(\"page\", \"1\")\n//\tall   := req.All()          // map[string]string\n//\tok    := req.Has(\"name\")\n//\n//\t// Route params (requires Chi router)\n//\tid := req.RouteParam(\"id\")\n//\n//\t// Headers and auth\n//\ttoken := req.BearerToken()\n//\tval   := req.Header(\"X-Custom\")\n//\n//\t// Type checks\n//\treq.IsJSON()   // Accept: application/json OR Content-Type: application/json\n//\treq.Method()   // \"GET\", \"POST\", ...\n//\treq.Path()     // \"/api/v1/users\"\n//\treq.IP()\n//\n//\t// File uploads\n//\tfh, err := req.File(\"avatar\")\n//\tfiles, err := req.Files(\"attachments\")\n//\n// # Response\n//\n// Response wraps http.ResponseWriter with helpers matching Laravel's\n// response() helper and JsonResponse.\n//\n//\tres := gohttp.NewResponse(w)\n//\n//\t// JSON\n//\tres.JSON(200, data)           // raw JSON with status\n//\tres.Success(data)             // 200 {\"data\": ...}\n//\tres.Created(data)             // 201 {\"data\": ...}\n//\tres.NoContent()               // 204\n//\n//\t// Errors\n//\tres.Error(400, \"bad input\")   // {\"message\": \"bad input\"}\n//\tres.Unauthorized()            // 401 {\"message\": \"Unauthenticated.\"}\n//\tres.Forbidden()               // 403 {\"message\": \"This action is unauthorized.\"}\n//\tres.NotFound()                // 404 {\"message\": \"Not found.\"}\n//\tres.ServerError()             // 500 {\"message\": \"Server Error.\"}\n//\tres.ValidationError(errs)     // 422 {\"errors\": {\"field\": [\"msg\"]}}\n//\n//\t// Redirects\n//\tres.RedirectTo(\"/dashboard\")                // 302\n//\tres.RedirectBack(r, \"/fallback\")            // 302 to Referer\n//\tres.Redirect(http.StatusMovedPermanently, \"/new\") // custom code\n//\n// # ViewEngine\n//\n//\tengine := gohttp.NewViewEngine(\"./views\", \".html\")\n//\tengine.View(w, \"home\", map[string]any{\"title\": \"Home\"})\n//\tengine.ViewWithLayout(w, \"layouts/app\", \"home\", data)\npackage http"
+        }
+    ]
+}
