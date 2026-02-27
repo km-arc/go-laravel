@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/km-arc/go-collections/framework/http/validation"
+	"github.com/km-arc/go-laravel/http/validation"
 )
 
 // ── Response ─────────────────────────────────────────────────────────────────

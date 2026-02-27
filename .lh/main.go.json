@@ -1,0 +1,18 @@
+{
+    "sourceFile": "main.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1772220531048,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1772220531047,
+            "name": "Commit-0",
+            "content": "package main\n\nimport (\n\t\"net/http\"\n\n\t\"github.com/km-arc/go-laravel/app\"\n\tgohttp \"github.com/km-arc/go-laravel/http\"\n\t\"github.com/km-arc/go-laravel/http/validation\"\n\t\"github.com/km-arc/go-laravel/routing\"\n)\n\nfunc main() {\n\tapplication := app.New() // loads .env automatically\n\n\tr := application.Router\n\n\t// ── Basic routes ─────────────────────────────────────────────────────────\n\n\tr.Get(\"/\", func(w http.ResponseWriter, req *http.Request) {\n\t\tres := gohttp.NewResponse(w)\n\t\tres.Success(map[string]any{\"message\": \"Welcome to Go-Laravel!\"})\n\t})\n\n\t// ── Route prefix (like Route::prefix('api')) ──────────────────────────────\n\n\tr.Prefix(\"/api/v1\", func(api *routing.Router) {\n\n\t\t// GET /api/v1/users\n\t\tapi.Get(\"/users\", func(w http.ResponseWriter, req *http.Request) {\n\t\t\tres := gohttp.NewResponse(w)\n\t\t\tres.Success([]map[string]any{\n\t\t\t\t{\"id\": 1, \"name\": \"Alice\"},\n\t\t\t\t{\"id\": 2, \"name\": \"Bob\"},\n\t\t\t})\n\t\t})\n\n\t\t// POST /api/v1/users\n\t\tapi.Post(\"/users\", func(w http.ResponseWriter, req *http.Request) {\n\t\t\trequest := gohttp.NewRequest(req)\n\t\t\tres := gohttp.NewResponse(w)\n\n\t\t\t// 1. Bind JSON body into a struct\n\t\t\tvar body struct {\n\t\t\t\tName  string `json:\"name\"`\n\t\t\t\tEmail string `json:\"email\"`\n\t\t\t\tAge   string `json:\"age\"`\n\t\t\t}\n\t\t\tif err := request.Bind(&body); err != nil {\n\t\t\t\tres.Error(http.StatusBadRequest, err.Error())\n\t\t\t\treturn\n\t\t\t}\n\n\t\t\t// 2. Validate — Laravel-style rules\n\t\t\tv := validation.Make(map[string]string{\n\t\t\t\t\"name\":  body.Name,\n\t\t\t\t\"email\": body.Email,\n\t\t\t\t\"age\":   body.Age,\n\t\t\t}, validation.Rules{\n\t\t\t\t\"name\":  \"required|min:2|max:100\",\n\t\t\t\t\"email\": \"required|email\",\n\t\t\t\t\"age\":   \"required|numeric|gte:18\",\n\t\t\t})\n\n\t\t\tif v.Fails() {\n\t\t\t\t// 3. Return 422 {\"errors\": {\"field\": [\"msg\"]}}\n\t\t\t\tres.ValidationError(v.Errors())\n\t\t\t\treturn\n\t\t\t}\n\n\t\t\t// 4. Return 201 created\n\t\t\tres.Created(map[string]any{\n\t\t\t\t\"name\":  body.Name,\n\t\t\t\t\"email\": body.Email,\n\t\t\t})\n\t\t})\n\n\t\t// GET /api/v1/users/{id}\n\t\tapi.Get(\"/users/{id}\", func(w http.ResponseWriter, req *http.Request) {\n\t\t\tres := gohttp.NewResponse(w)\n\t\t\tid := routing.Param(req, \"id\")\n\t\t\tres.Success(map[string]any{\"id\": id})\n\t\t})\n\n\t})\n\n\t// ── Auth group with middleware ─────────────────────────────────────────────\n\n\tr.Group(func(protected *routing.Router) {\n\t\tprotected.Middleware(AuthMiddleware)\n\n\t\tprotected.Get(\"/profile\", func(w http.ResponseWriter, req *http.Request) {\n\t\t\tres := gohttp.NewResponse(w)\n\t\t\tres.Success(map[string]any{\"user\": \"authenticated\"})\n\t\t})\n\t})\n\n\tapplication.Run()\n}\n\n// AuthMiddleware is an example JWT/token guard.\nfunc AuthMiddleware(next http.Handler) http.Handler {\n\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\treq := gohttp.NewRequest(r)\n\t\tres := gohttp.NewResponse(w)\n\n\t\tif req.BearerToken() == \"\" {\n\t\t\tres.Unauthorized()\n\t\t\treturn\n\t\t}\n\t\tnext.ServeHTTP(w, r)\n\t})\n}\n"
+        }
+    ]
+}

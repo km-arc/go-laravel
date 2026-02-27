@@ -3,7 +3,7 @@ package validation_test
 import (
 	"testing"
 
-	"github.com/km-arc/go-collections/framework/http/validation"
+	"github.com/km-arc/go-laravel/http/validation"
 )
 
 // ── helpers ──────────────────────────────────────────────────────────────────

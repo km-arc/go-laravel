@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	gohttp "github.com/km-arc/go-collections/framework/http"
+	gohttp "github.com/km-arc/go-laravel/http"
 )
 
 // ── helpers ──────────────────────────────────────────────────────────────────

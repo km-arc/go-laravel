@@ -15,7 +15,7 @@
                 },
                 {
                     "date": 1772218935498,
-                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-module github.com/km-arc/go-collections/framework\n+module github.com/km-arc/go-/framework\n \n go 1.26\n \n require (\n"
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-module github.com/km-arc/go-laravel\n+module github.com/km-arc/go-/framework\n \n go 1.26\n \n require (\n"
                 },
                 {
                     "date": 1772218943673,
@@ -24,7 +24,7 @@
             ],
             "date": 1772218611406,
             "name": "Commit-0",
-            "content": "module github.com/km-arc/go-collections/framework\n\ngo 1.26\n\nrequire (\n\tgithub.com/go-chi/chi/v5 v5.0.12\n\tgithub.com/joho/godotenv v1.5.1\n)\n"
+            "content": "module github.com/km-arc/go-laravel\n\ngo 1.26\n\nrequire (\n\tgithub.com/go-chi/chi/v5 v5.0.12\n\tgithub.com/joho/godotenv v1.5.1\n)\n"
         }
     ]
 }

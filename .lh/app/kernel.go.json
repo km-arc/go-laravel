@@ -3,16 +3,20 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1772220323883,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1772220531347,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,10 +4,10 @@\n \t\"fmt\"\n \t\"log\"\n \t\"net/http\"\n \n-\tgohttp \"github.com/km-arc/go-collections/framework/http\"\n-\t\"github.com/km-arc/go-collections/framework/routing\"\n+\tgohttp \"github.com/km-arc/go-laravel/http\"\n+\t\"github.com/km-arc/go-laravel/routing\"\n \t\"github.com/km-arc/go-laravel/config\"\n )\n \n // Application is the top-level container — mirrors Laravel's Application.\n"
                 }
             ],
             "date": 1772220323883,
             "name": "Commit-0",
-            "content": "package app\n\nimport (\n\t\"fmt\"\n\t\"log\"\n\t\"net/http\"\n\n\t\"github.com/km-arc/go-laravel\"\n\tgohttp \"github.com/km-arc/go-collections/framework/http\"\n\t\"github.com/km-arc/go-collections/framework/routing\"\n)\n\n// Application is the top-level container — mirrors Laravel's Application.\ntype Application struct {\n\tConfig *config.Config\n\tRouter *routing.Router\n\tViews  *gohttp.ViewEngine\n}\n\n// New bootstraps the application.\n//\n//\tapp := app.New()\n//\tapp.Router.Get(\"/\", handler)\n//\tapp.Run()\nfunc New(envFiles ...string) *Application {\n\tcfg := config.Load(envFiles...)\n\n\treturn &Application{\n\t\tConfig: cfg,\n\t\tRouter: routing.New(),\n\t\tViews:  gohttp.NewViewEngine(\"./views\", \".html\"),\n\t}\n}\n\n// Run starts the HTTP server on APP_PORT (default 8000).\nfunc (a *Application) Run() {\n\taddr := \":\" + a.Config.App.Port\n\tfmt.Printf(\"🚀  %s running on http://localhost%s  [%s]\\n\",\n\t\ta.Config.App.Name, addr, a.Config.App.Env)\n\n\tif err := http.ListenAndServe(addr, a.Router); err != nil {\n\t\tlog.Fatalf(\"server error: %v\", err)\n\t}\n}\n\n// ── Controller base ───────────────────────────────────────────────────────────\n\n// Controller is an embeddable base for all controllers,\n// providing Req/Res factory methods.\ntype Controller struct{}\n\nfunc (c *Controller) Request(r *http.Request) *gohttp.Request {\n\treturn gohttp.NewRequest(r)\n}\n\nfunc (c *Controller) Response(w http.ResponseWriter) *gohttp.Response {\n\treturn gohttp.NewResponse(w)\n}\n"
+            "content": "package app\n\nimport (\n\t\"fmt\"\n\t\"log\"\n\t\"net/http\"\n\n\t\"github.com/km-arc/go-laravel\"\n\tgohttp \"github.com/km-arc/go-laravel/http\"\n\t\"github.com/km-arc/go-laravel/routing\"\n)\n\n// Application is the top-level container — mirrors Laravel's Application.\ntype Application struct {\n\tConfig *config.Config\n\tRouter *routing.Router\n\tViews  *gohttp.ViewEngine\n}\n\n// New bootstraps the application.\n//\n//\tapp := app.New()\n//\tapp.Router.Get(\"/\", handler)\n//\tapp.Run()\nfunc New(envFiles ...string) *Application {\n\tcfg := config.Load(envFiles...)\n\n\treturn &Application{\n\t\tConfig: cfg,\n\t\tRouter: routing.New(),\n\t\tViews:  gohttp.NewViewEngine(\"./views\", \".html\"),\n\t}\n}\n\n// Run starts the HTTP server on APP_PORT (default 8000).\nfunc (a *Application) Run() {\n\taddr := \":\" + a.Config.App.Port\n\tfmt.Printf(\"🚀  %s running on http://localhost%s  [%s]\\n\",\n\t\ta.Config.App.Name, addr, a.Config.App.Env)\n\n\tif err := http.ListenAndServe(addr, a.Router); err != nil {\n\t\tlog.Fatalf(\"server error: %v\", err)\n\t}\n}\n\n// ── Controller base ───────────────────────────────────────────────────────────\n\n// Controller is an embeddable base for all controllers,\n// providing Req/Res factory methods.\ntype Controller struct{}\n\nfunc (c *Controller) Request(r *http.Request) *gohttp.Request {\n\treturn gohttp.NewRequest(r)\n}\n\nfunc (c *Controller) Response(w http.ResponseWriter) *gohttp.Response {\n\treturn gohttp.NewResponse(w)\n}\n"
         }
     ]
 }

@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	gohttp "github.com/km-arc/go-collections/framework/http"
-	"github.com/km-arc/go-collections/framework/routing"
 	"github.com/km-arc/go-laravel/config"
+	gohttp "github.com/km-arc/go-laravel/http"
+	"github.com/km-arc/go-laravel/routing"
 )
 
 // Application is the top-level container — mirrors Laravel's Application.

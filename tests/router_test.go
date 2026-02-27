@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/km-arc/go-collections/framework/routing"
+	"github.com/km-arc/go-laravel/routing"
 )
 
 // ── helpers ──────────────────────────────────────────────────────────────────

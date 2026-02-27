@@ -25,7 +25,7 @@ A Laravel-style HTTP framework for Go, built on top of [Chi](https://github.com/
 ## Installation
 
 ```bash
-go get github.com/km-arc/go-collections/framework
+go get github.com/km-arc/go-laravel
 go get github.com/go-chi/chi/v5
 go get github.com/joho/godotenv
 ```
@@ -39,8 +39,8 @@ package main
 
 import (
     "net/http"
-    "github.com/km-arc/go-collections/framework/app"
-    gohttp "github.com/km-arc/go-collections/framework/http"
+    "github.com/km-arc/go-laravel/app"
+    gohttp "github.com/km-arc/go-laravel/http"
 )
 
 func main() {

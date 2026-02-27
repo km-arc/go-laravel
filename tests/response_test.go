@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	gohttp "github.com/km-arc/go-collections/framework/http"
-	"github.com/km-arc/go-collections/framework/http/validation"
+	gohttp "github.com/km-arc/go-laravel/http"
+	"github.com/km-arc/go-laravel/http/validation"
 )
 
 // ── helpers ──────────────────────────────────────────────────────────────────
